@@ -8,18 +8,41 @@
 import SwiftUI
 
 struct ContentView: View {
-        @State private var showCheckout = false
-        
-        var body: some View {
-            VStack(spacing: 20) {
-                // Rectangle Button with 99rs Text
-                Button(action: {
-                    // Action for rectangle button if needed
-                }) {
-                    HStack{
-                        Text("99rs")
-                            
-                        
+    @State private var showCheckout = false
+
+    var body: some View {
+        VStack(spacing: 20) {
+            // Rectangle Button with 99rs Text
+            HStack {
+                Text("$9.99")
+                    .offset(x: showCheckout ? 10 : 40)
+
+                //                Spacer()
+
+                ZStack {
+                    // Animated background shape: Circle or Rectangle based on `showCheckout`
+                    RoundedRectangle(cornerRadius: showCheckout ? 30 : 50)
+                        .fill(showCheckout ? Color.gray : Color.black)
+                        .frame(width: showCheckout ? 180 : 80, height: 62)
+                        .animation(
+                            .easeInOut(duration: 0.3), value: showCheckout)
+
+                    // Conditionally show either Arrow or Checkout Text with Swipe Animation
+                    if showCheckout {
+                        Button(action: {
+                            withAnimation {
+                                showCheckout.toggle()
+                            }
+                        }) {
+                            HStack {
+                                Text("Checkout Now")
+                                Image(systemName: "arrow.right")
+                            }
+                            .font(.system(size: 20))
+                            .foregroundColor(.black)
+                        }
+                        .transition(.move(edge: .trailing))
+                    } else {
                         Button(action: {
                             withAnimation {
                                 showCheckout.toggle()
@@ -27,50 +50,24 @@ struct ContentView: View {
                         }) {
                             Image(systemName: "arrow.right.circle.fill")
                                 .resizable()
-                                .frame(width: 40, height: 40)
-                                .foregroundColor(.blue)
+                                .frame(width: 62, height: 62)
+                                .foregroundColor(.white)
+
                         }
-                        .font(.title)
-                        .foregroundColor(.white)
-                        .padding()
-                        .frame(width: 200, height: 50)
-                        .background(Color.blue)
-                        .cornerRadius(10)
                     }
+
                 }
-                
-                // Round Button
-//                Button(action: {
-//                    // Action for round button if needed
-//                }) {
-//                    Circle()
-//                        .fill(Color.green)
-//                        .frame(width: 60, height: 60)
-//                }
-                
-                // Arrow Button with Slide Animation
-//                Button(action: {
-//                    withAnimation {
-//                        showCheckout.toggle()
-//                    }
-//                }) {
-//                    Image(systemName: "arrow.right.circle.fill")
-//                        .resizable()
-//                        .frame(width: 40, height: 40)
-//                        .foregroundColor(.blue)
-//                }
-                
-                // Checkout Text with Slide-In Animation
-                if showCheckout {
-                    Text("Checkout")
-                        .font(.title)
-                        .foregroundColor(.blue)
-                        .transition(.move(edge: .trailing))
-                }
+                .offset(x: showCheckout ? 10 : 70)
             }
+            .font(.title)
+            .foregroundColor(.white)
             .padding()
+            .frame(width: 300, height: 70)
+            .background(Color.black)
+            .cornerRadius(50)
         }
-    
+        .padding()
+    }
 }
 
 #Preview {
